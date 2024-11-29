@@ -1,0 +1,11 @@
+name: PR Check - Terraform validation
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  call_validate_terraform_module:
+    name: Validate Terraform module
+    uses: puchy/tf-lab-actions/.github/workflows/pr_check_terraform.yaml@main
