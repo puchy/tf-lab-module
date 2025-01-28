@@ -28,22 +28,26 @@ repos:
         args:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl # Specifies custom tflint configuration file
 
-  # # Pre-commit hook for tfsec
-  # - repo: https://github.com/aquasecurity/tfsec
-  #   rev: v1.28.11 # Check for the latest version at https://github.com/aquasecurity/tfsec/releases
-  #   hooks:
-  #     - id: tfsec
-  #       args:
-  #         - --exclude=AWS001,AZU002 # Example: Exclude specific rules
-  #       exclude: ^example/.*$       # Excludes files in 'example' directory
-  #       pass_failing: true          # Allows hook to pass even if issues are found
+  # Pre-commit hook for Trivy
+  - repo: https://github.com/aquasecurity/trivy
+    rev: v0.58.2 # Check for the latest version at https://github.com/aquasecurity/trivy/releases
+    hooks:
+      - id: trivy-config
+        name: Trivy Scan for Terraform
+        entry: trivy config
+        args:
+          - --severity=HIGH,CRITICAL   # Only report high and critical severity issues
+          - --skip-dirs=.terraform     # Exclude `.terraform` directory
+          - --exit-code=0              # Do not block the commit; warnings only
+        exclude: ^example/.*$           # Exclude files in the 'example' directory
+        pass_failing: true              # Allow the hook to pass even if issues are found
 
-  # # Pre-commit hook for checkov
-  # - repo: https://github.com/bridgecrewio/checkov
-  #   rev: 3.2.317 # Check for the latest version at https://github.com/bridgecrewio/checkov/releases
-  #   hooks:
-  #     - id: checkov
-  #       args:
-  #         - --quiet                # Suppress non-critical output
-  #       files: \.tf$               # Applies only to Terraform files
-  #       exclude: ^example/.*$      # Excludes files in 'example' directory
+  # Pre-commit hook for checkov
+  - repo: https://github.com/bridgecrewio/checkov
+    rev: 3.2.358 # Check for the latest version at https://github.com/bridgecrewio/checkov/releases
+    hooks:
+      - id: checkov
+        args:
+          - --quiet                # Suppress non-critical output
+        files: \.tf$               # Applies only to Terraform files
+        exclude: ^example/.*$      # Excludes files in 'example' directory
