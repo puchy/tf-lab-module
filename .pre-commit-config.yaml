@@ -27,20 +27,9 @@ repos:
         exclude: ^examples/             # Exclude examples from documentation generation
         args:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl # Specifies custom tflint configuration file
-
-  # Pre-commit hook for Trivy
-  - repo: https://github.com/aquasecurity/trivy
-    rev: v0.58.2 # Check for the latest version at https://github.com/aquasecurity/trivy/releases
-    hooks:
-      - id: trivy-config
-        name: Trivy Scan for Terraform
-        entry: trivy config
+      - id: terraform_trivy
         args:
-          - --severity=HIGH,CRITICAL   # Only report high and critical severity issues
-          - --skip-dirs=.terraform     # Exclude `.terraform` directory
-          - --exit-code=0              # Do not block the commit; warnings only
-        exclude: ^example/.*$           # Exclude files in the 'example' directory
-        pass_failing: true              # Allow the hook to pass even if issues are found
+        - --args=--skip-dirs="**/.terraform,**/examples" # Skips .terraform and examples directories
 
   # Pre-commit hook for checkov
   - repo: https://github.com/bridgecrewio/checkov
@@ -50,4 +39,5 @@ repos:
         args:
           - --quiet                # Suppress non-critical output
         files: \.tf$               # Applies only to Terraform files
-        exclude: ^example/.*$      # Excludes files in 'example' directory
+        exclude: (^|/)examples/.*  # Exclude all files in any 'examples' directory
+        #exclude: ^examples/.*$      # Excludes files in 'example' directory
