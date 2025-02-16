@@ -28,6 +28,7 @@ repos:
         args:
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl # Specifies custom tflint configuration file
       - id: terraform_trivy
+        exclude: (^|/)examples/.*
         args:
         - --args=--skip-dirs="**/.terraform,**/examples" # Skips .terraform and examples directories
 
@@ -38,6 +39,7 @@ repos:
       - id: checkov
         args:
           - --quiet                # Suppress non-critical output
+          - --skip-path=examples
+          - --framework=terraform  # Specifies the framework to use
         files: \.tf$               # Applies only to Terraform files
-        exclude: (^|/)examples/.*  # Exclude all files in any 'examples' directory
-        #exclude: ^examples/.*$      # Excludes files in 'example' directory
+        exclude: (^|/)examples/.*
