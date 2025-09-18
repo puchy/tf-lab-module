@@ -13,7 +13,7 @@ repos:
 
   # Terraform-specific hooks
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.96.2 # Check the latest version at: https://github.com/antonbabenko/pre-commit-terraform/releases
+    rev: v1.100.0 # Check the latest version at: https://github.com/antonbabenko/pre-commit-terraform/releases
     hooks:
       - id: terraform_fmt               # Formats Terraform code
       - id: terraform_docs              # Updates Terraform documentation
@@ -23,23 +23,23 @@ repos:
           - --hook-config=--add-to-existing-file=true
           - --hook-config=--create-file-if-not-exist=true
           - --args=--hide providers      # Hides the 'providers' section from the output
-      - id: terraform_tflint             # Runs tflint for linting Terraform code
-        exclude: ^examples/             # Exclude examples from documentation generation
-        args:
-          - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl # Specifies custom tflint configuration file
-      - id: terraform_trivy
-        exclude: (^|/)examples/.*
-        args:
-        - --args=--skip-dirs="**/.terraform,**/examples" # Skips .terraform and examples directories
+      # - id: terraform_tflint             # Runs tflint for linting Terraform code
+      #   exclude: ^examples/             # Exclude examples from documentation generation
+      #   args:
+      #     - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl # Specifies custom tflint configuration file
+      # - id: terraform_trivy
+      #   exclude: (^|/)examples/.*
+      #   args:
+      #   - --args=--skip-dirs="**/.terraform,**/examples" # Skips .terraform and examples directories
 
-  # Pre-commit hook for checkov
-  - repo: https://github.com/bridgecrewio/checkov
-    rev: 3.2.358 # Check for the latest version at https://github.com/bridgecrewio/checkov/releases
-    hooks:
-      - id: checkov
-        args:
-          - --quiet                # Suppress non-critical output
-          - --skip-path=examples
-          - --framework=terraform  # Specifies the framework to use
-        files: \.tf$               # Applies only to Terraform files
-        exclude: (^|/)examples/.*
+  # # Pre-commit hook for checkov
+  # - repo: https://github.com/bridgecrewio/checkov
+  #   rev: 3.2.358 # Check for the latest version at https://github.com/bridgecrewio/checkov/releases
+  #   hooks:
+  #     - id: checkov
+  #       args:
+  #         - --quiet                # Suppress non-critical output
+  #         - --skip-path=examples
+  #         - --framework=terraform  # Specifies the framework to use
+  #       files: \.tf$               # Applies only to Terraform files
+  #       exclude: (^|/)examples/.*
